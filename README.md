@@ -8,6 +8,12 @@ builds a docker image with Ruby installed using rbenv instead of rvm.
 
 This is experimental! Use at your own risk.
 
+# Docker Hub repository
+
+Builds are available here:
+
+https://hub.docker.com/r/codeforkjeff/passenger-ruby23/
+
 # How to build
 
 On Linux, you should be able to run:
