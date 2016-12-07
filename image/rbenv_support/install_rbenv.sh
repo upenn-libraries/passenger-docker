@@ -1,5 +1,8 @@
 #!/bin/bash
-# Install rbenv globally and replace /usr/bin commands
+set -e
+source /pd_build/buildconfig
+
+echo "+ Installing rbenv globally and replacing /usr/bin commands"
 
 git clone https://github.com/rbenv/rbenv.git /opt/rbenv
 cd /opt/rbenv

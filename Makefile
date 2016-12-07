@@ -1,5 +1,6 @@
 NAME = phusion/passenger
 VERSION = 0.9.19
+RUBY_INSTALL_METHOD = ruby-build
 
 .PHONY: all build_all \
 	build_customizable \
@@ -52,6 +53,7 @@ build_ruby23:
 	cp -pR image ruby23_image
 	echo ruby23=1 >> ruby23_image/buildconfig
 	echo final=1 >> ruby23_image/buildconfig
+	echo ruby_install_method=$(RUBY_INSTALL_METHOD) >> ruby23_image/buildconfig
 	docker build -t $(NAME)-ruby23:$(VERSION) --rm ruby23_image
 
 build_jruby91:

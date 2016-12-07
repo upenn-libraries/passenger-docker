@@ -19,10 +19,18 @@ https://hub.docker.com/r/codeforkjeff/passenger-ruby23/
 On Linux, you should be able to run:
 
 ```
-make build_ruby23 NAME=codeforkjeff/passenger VERSION=0.9.19-rbenv
+make build_ruby23 NAME=codeforkjeff/passenger VERSION=0.9.19-ruby-build
 ```
 
-This should build an image named `codeforkjeff/passenger-ruby23:0.9.19-rbenv`
+This should build an image named `codeforkjeff/passenger-ruby23:0.9.19-ruby-build`
+
+You can set `RUBY_INSTALL_METHOD` to 'rvm-binary' to use a precompiled
+ruby from rvm. (By default, the value is 'ruby-build' which builds from
+source.) Example:
+
+```
+make build_ruby23 NAME=codeforkjeff/passenger VERSION=0.9.19-rvm-binary RUBY_INSTALL_METHOD=rvm-binary
+```
 
 For other platforms and/or more complete instructions, see the section
 ["Building the image yourself"](https://github.com/phusion/passenger-docker#building)

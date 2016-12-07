@@ -1,7 +1,9 @@
 #!/bin/bash
 # This should be run by each user who needs to use Ruby
+set -e
+source /pd_build/buildconfig
 
-rbenv init
+echo "+ Installing rbenv for user $USER"
 
 eval "$(rbenv init -)"
 
