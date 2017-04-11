@@ -21,6 +21,8 @@ echo 'source /etc/profile.d/*rbenv*' >> /etc/bash.bashrc
 # calls with "bash -c -l" (and there are some places we might not be
 # able to do that anyway.) we assume /root as home directory when HOME
 # isn't set, which is the case with /etc/my_init.d scripts.
+#
+# TODO: figure out a better way
 
 cat >/usr/bin/ruby <<EOL
 #!/bin/bash
