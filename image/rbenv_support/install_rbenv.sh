@@ -31,7 +31,7 @@ then
   HOME=/root
 fi
 eval "\$(rbenv init -)"
-exec \$HOME/.rbenv/shims/ruby \$@
+exec \$HOME/.rbenv/shims/ruby "\$@"
 EOL
 
 ln -s /usr/bin/ruby /usr/bin/ruby2.3
@@ -43,7 +43,7 @@ then
   HOME=/root
 fi
 eval "\$(rbenv init -)"
-exec \$HOME/.rbenv/shims/gem \$@
+exec \$HOME/.rbenv/shims/gem "\$@"
 EOL
 
 cat >/usr/bin/bundle <<EOL
@@ -53,7 +53,7 @@ then
   HOME=/root
 fi
 eval "\$(rbenv init -)"
-exec \$HOME/.rbenv/shims/bundle \$@
+exec \$HOME/.rbenv/shims/bundle "\$@"
 EOL
 
 chmod a+x /usr/bin/ruby
