@@ -15,18 +15,14 @@ run gpg --import /pd_build/ruby_support/mpapis-pubkey.asc
 run bash /pd_build/ruby_support/rvm-install.sh stable
 echo "+ Updating /etc/profile.d/rvm_secure_path.sh"
 echo export rvmsudo_secure_path=1 > /etc/profile.d/rvm_secure_path.sh
+echo export rvm_silence_path_mismatch_check_flag=1 >> /etc/profile.d/rvm_silence_path_warning.sh
 run chmod +x /etc/profile.d/rvm_secure_path.sh
+run chmod +x /etc/profile.d/rvm_silence_path_warning.sh
 run usermod -a -G rvm app
 
 # Note: we cannot install an 'rvm' script to /usr/bin because
 # then RVM will try to remove /usr/bin from PATH.
 run install -o root /pd_build/ruby_support/system-rvm-exec.sh /usr/bin/rvm-exec
-
-create_rvm_wrapper_script ruby default ruby
-create_rvm_wrapper_script gem default gem
-create_rvm_wrapper_script rake default rake
-create_rvm_wrapper_script bundle default bundle
-create_rvm_wrapper_script bundler default bundler
 
 # Ensure bash always loads the RVM environment.
 echo 'if [[ "$rvm_prefix" = "" ]]; then source /etc/profile.d/*rvm*; fi' >> /etc/bash.bashrc

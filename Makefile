@@ -1,6 +1,9 @@
 NAME = phusion/passenger
-VERSION = 0.9.20
+VERSION = 0.9.23
 RUBY_INSTALL_METHOD = ruby-build
+# Extra flags for docker build, usable via environment variable.
+# Example: `export EXTRA_BUILD_FLAGS=--no-cache; make build_all`
+EXTRA_BUILD_FLAGS?=
 
 .PHONY: all build_all \
 	build_customizable \
@@ -26,28 +29,28 @@ build_all: \
 build_customizable:
 	rm -rf customizable_image
 	cp -pR image customizable_image
-	docker build -t $(NAME)-customizable:$(VERSION) --rm customizable_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-customizable:$(VERSION) --rm customizable_image
 
 build_ruby20:
 	rm -rf ruby20_image
 	cp -pR image ruby20_image
 	echo ruby20=1 >> ruby20_image/buildconfig
 	echo final=1 >> ruby20_image/buildconfig
-	docker build -t $(NAME)-ruby20:$(VERSION) --rm ruby20_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-ruby20:$(VERSION) --rm ruby20_image
 
 build_ruby21:
 	rm -rf ruby21_image
 	cp -pR image ruby21_image
 	echo ruby21=1 >> ruby21_image/buildconfig
 	echo final=1 >> ruby21_image/buildconfig
-	docker build -t $(NAME)-ruby21:$(VERSION) --rm ruby21_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-ruby21:$(VERSION) --rm ruby21_image
 
 build_ruby22:
 	rm -rf ruby22_image
 	cp -pR image ruby22_image
 	echo ruby22=1 >> ruby22_image/buildconfig
 	echo final=1 >> ruby22_image/buildconfig
-	docker build -t $(NAME)-ruby22:$(VERSION) --rm ruby22_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-ruby22:$(VERSION) --rm ruby22_image
 
 build_ruby23:
 	rm -rf ruby23_image
@@ -55,28 +58,28 @@ build_ruby23:
 	echo ruby23=1 >> ruby23_image/buildconfig
 	echo final=1 >> ruby23_image/buildconfig
 	echo ruby_install_method=$(RUBY_INSTALL_METHOD) >> ruby23_image/buildconfig
-	docker build -t $(NAME)-ruby23:$(VERSION) --rm ruby23_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-ruby23:$(VERSION) --rm ruby23_image
 
 build_ruby24:
 	rm -rf ruby24_image
 	cp -pR image ruby24_image
 	echo ruby24=1 >> ruby24_image/buildconfig
 	echo final=1 >> ruby24_image/buildconfig
-	docker build -t $(NAME)-ruby24:$(VERSION) --rm ruby24_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-ruby24:$(VERSION) --rm ruby24_image
 
 build_jruby91:
 	rm -rf jruby91_image
 	cp -pR image jruby91_image
 	echo jruby91=1 >> jruby91_image/buildconfig
 	echo final=1 >> jruby91_image/buildconfig
-	docker build -t $(NAME)-jruby91:$(VERSION) --rm jruby91_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-jruby91:$(VERSION) --rm jruby91_image
 
 build_nodejs:
 	rm -rf nodejs_image
 	cp -pR image nodejs_image
 	echo nodejs=1 >> nodejs_image/buildconfig
 	echo final=1 >> nodejs_image/buildconfig
-	docker build -t $(NAME)-nodejs:$(VERSION) --rm nodejs_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-nodejs:$(VERSION) --rm nodejs_image
 
 build_full:
 	rm -rf full_image
@@ -92,7 +95,7 @@ build_full:
 	echo redis=1 >> full_image/buildconfig
 	echo memcached=1 >> full_image/buildconfig
 	echo final=1 >> full_image/buildconfig
-	docker build -t $(NAME)-full:$(VERSION) --rm full_image
+	docker build $(EXTRA_BUILD_FLAGS) -t $(NAME)-full:$(VERSION) --rm full_image
 
 tag_latest:
 	docker tag $(NAME)-customizable:$(VERSION) $(NAME)-customizable:latest
@@ -115,15 +118,15 @@ release: tag_latest
 	@if ! docker images $(NAME)-jruby91 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-jruby91 version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! docker images $(NAME)-nodejs | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-nodejs version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! docker images $(NAME)-full | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-full version $(VERSION) is not yet built. Please run 'make build'"; false; fi
-	docker push $(NAME)-customizable
-	docker push $(NAME)-ruby20
-	docker push $(NAME)-ruby21
-	docker push $(NAME)-ruby22
-	docker push $(NAME)-ruby23
-	docker push $(NAME)-ruby24
-	docker push $(NAME)-jruby91
-	docker push $(NAME)-nodejs
-	docker push $(NAME)-full
+	docker push $(NAME)-customizable:$(VERSION)
+	docker push $(NAME)-ruby20:$(VERSION)
+	docker push $(NAME)-ruby21:$(VERSION)
+	docker push $(NAME)-ruby22:$(VERSION)
+	docker push $(NAME)-ruby23:$(VERSION)
+	docker push $(NAME)-ruby24:$(VERSION)
+	docker push $(NAME)-jruby91:$(VERSION)
+	docker push $(NAME)-nodejs:$(VERSION)
+	docker push $(NAME)-full:$(VERSION)
 	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
 
 clean:
@@ -138,12 +141,12 @@ clean:
 	rm -rf full_image
 
 clean_images:
-	docker rmi phusion/passenger-customizable:latest phusion/passenger-customizable:$(VERSION) || true
-	docker rmi phusion/passenger-ruby20:latest phusion/passenger-ruby20:$(VERSION) || true
-	docker rmi phusion/passenger-ruby21:latest phusion/passenger-ruby21:$(VERSION) || true
-	docker rmi phusion/passenger-ruby22:latest phusion/passenger-ruby22:$(VERSION) || true
-	docker rmi phusion/passenger-ruby23:latest phusion/passenger-ruby23:$(VERSION) || true
-	docker rmi phusion/passenger-ruby24:latest phusion/passenger-ruby24:$(VERSION) || true
-	docker rmi phusion/passenger-jruby91:latest phusion/passenger-jruby91:$(VERSION) || true
-	docker rmi phusion/passenger-nodejs:latest phusion/passenger-nodejs:$(VERSION) || true
-	docker rmi phusion/passenger-full:latest phusion/passenger-full:$(VERSION) || true
+	docker rmi $(NAME)-customizable:latest $(NAME)-customizable:$(VERSION) || true
+	docker rmi $(NAME)-ruby20:latest $(NAME)-ruby20:$(VERSION) || true
+	docker rmi $(NAME)-ruby21:latest $(NAME)-ruby21:$(VERSION) || true
+	docker rmi $(NAME)-ruby22:latest $(NAME)-ruby22:$(VERSION) || true
+	docker rmi $(NAME)-ruby23:latest $(NAME)-ruby23:$(VERSION) || true
+	docker rmi $(NAME)-ruby24:latest $(NAME)-ruby24:$(VERSION) || true
+	docker rmi $(NAME)-jruby91:latest $(NAME)-jruby91:$(VERSION) || true
+	docker rmi $(NAME)-nodejs:latest $(NAME)-nodejs:$(VERSION) || true
+	docker rmi $(NAME)-full:latest $(NAME)-full:$(VERSION) || true
