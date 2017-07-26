@@ -12,24 +12,24 @@ This is experimental! Use at your own risk.
 
 Builds are available here:
 
-https://hub.docker.com/r/codeforkjeff/passenger-ruby23/
+https://hub.docker.com/r/pennlib/passenger-ruby23/
 
 # How to build
 
 On Linux, you should be able to run:
 
 ```
-make build_ruby23 NAME=codeforkjeff/passenger VERSION=0.9.19-ruby-build
+make build_ruby23 NAME=pennlib/passenger VERSION=0.9.23-ruby-build
 ```
 
-This should build an image named `codeforkjeff/passenger-ruby23:0.9.19-ruby-build`
+This should build an image named `pennlib/passenger-ruby23:0.9.23-ruby-build`
 
 You can set `RUBY_INSTALL_METHOD` to 'rvm-binary' to use a precompiled
 ruby from rvm. (By default, the value is 'ruby-build' which builds from
 source.) Example:
 
 ```
-make build_ruby23 NAME=codeforkjeff/passenger VERSION=0.9.19-rvm-binary RUBY_INSTALL_METHOD=rvm-binary
+make build_ruby23 NAME=pennlib/passenger VERSION=0.9.23-rvm-binary RUBY_INSTALL_METHOD=rvm-binary
 ```
 
 For other platforms and/or more complete instructions, see the section
